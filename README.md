@@ -10,3 +10,4 @@
 * Prime factors
 * GuildRose
 * Find missing number in array
+* Josephus Permutation
