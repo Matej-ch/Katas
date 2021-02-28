@@ -6,7 +6,7 @@ namespace App;
 class RomanNumerals
 {
 
-    const NUMERALS = [
+    public const NUMERALS = [
         'M' => 1000,
         'CM' => 900,
         'D' => 500,
@@ -25,8 +25,7 @@ class RomanNumerals
     public static function generate($number)
     {
 
-        if($number < 1 || $number > 3999)
-            return false;
+        if($number < 1 || $number > 3999) { return false; }
 
         $result = '';
 
@@ -35,6 +34,20 @@ class RomanNumerals
                 $result .= $numeral;
 
                 $number -= $arabic;
+            }
+        }
+
+        return $result;
+    }
+
+    public static function generateNumber($romanString): int
+    {
+        $result = 0;
+
+        foreach (static::NUMERALS as $roman => $numeric) {
+            while (strpos($romanString, $roman) === 0) {
+                $result += $numeric;
+                $romanString = substr($romanString, strlen($roman));
             }
         }
 

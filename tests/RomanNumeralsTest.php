@@ -19,6 +19,17 @@ class RomanNumeralsTest extends TestCase
 
     /**
      * @test
+     * @dataProvider checksFromRoman
+     * @param $number
+     * @param $expected
+     */
+    function it_generates_number_from_roman_numerals($roman,$expected)
+    {
+        $this->assertEquals($expected,RomanNumerals::generateNumber($roman));
+    }
+
+    /**
+     * @test
      */
     function it_cannot_generate_a_roman_numeral_for_less_than_1()
     {
@@ -56,6 +67,32 @@ class RomanNumeralsTest extends TestCase
             [900,'CM'],
             [1000,'M'],
             [3999,'MMMCMXCIX'],
+        ];
+    }
+
+    public function checksFromRoman()
+    {
+        return [
+            ['I',1],
+            ['II',2],
+            ['III',3],
+            ['IV',4],
+            ['V',5],
+            ['VI',6],
+            ['VII',7],
+            ['VIII',8],
+            ['IX',9],
+            ['X',10],
+            ['XL',40],
+            ['L',50],
+            ['XC',90],
+            ['XCIX',99],
+            ['C',100],
+            ['CD',400],
+            ['D',500],
+            ['CM',900],
+            ['M',1000],
+            ['MMMCMXCIX',3999],
         ];
     }
 }
