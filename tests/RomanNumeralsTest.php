@@ -66,6 +66,8 @@ class RomanNumeralsTest extends TestCase
             [500,'D'],
             [900,'CM'],
             [1000,'M'],
+            [1990,'MCMXC'],
+            [2008,'MMVIII'],
             [3999,'MMMCMXCIX'],
         ];
     }
@@ -93,6 +95,8 @@ class RomanNumeralsTest extends TestCase
             ['CM',900],
             ['M',1000],
             ['MMMCMXCIX',3999],
+            ['MMVII',2007],
+            ['MDCLXIX',1669]
         ];
     }
 }
