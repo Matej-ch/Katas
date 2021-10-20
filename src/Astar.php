@@ -9,6 +9,7 @@ class Astar
     public array $grid = [];
     public array $openSet = [];
     public array $closedSet = [];
+    //public array $neighbours = [];
 
     public $start;
     public $end;
@@ -25,7 +26,7 @@ class Astar
 
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
-                $this->grid[$i][$j] = (object)['f' => 0,'g' => 0,'h' => 0];
+                $this->grid[$i][$j] = new AstarSpot(0,0,0);
             }
         }
 
@@ -33,22 +34,45 @@ class Astar
         $this->end = $this->grid[$this->columns - 1][$this->rows - 1];
 
         $this->openSet[] = $this->start;
-
-
-        echo '<pre>'.print_r($this->openSet,true).'</pre>';
-        echo '<pre>'.print_r($this->grid,true).'</pre>';die();
     }
 
     public function lookForPath()
     {
         while (!empty($this->openSet)) {
 
-            if(count($this->openSet) > 0) {
-                //continue
+            $winningIndex = 0;
+            $openSetCount = count($this->openSet);
+            if($openSetCount > 0) {
+
+                for ($i = 0; $i < $openSetCount; $i++) {
+                    if($this->openSet[$i]->f < $this->openSet[$winningIndex]->f) {
+                        $winningIndex = $i;
+                    }
+                }
+
+                $current = $this->openSet[$winningIndex];
+
+                if($current === $this->end) {
+                    //we are done here
+                    return;
+                }
+
+                //remove current
+                unset($this->openSet[$winningIndex]);
+                //add current
+                $this->closedSet[] = $current;
+
+
+
             } else {
                 //path not found
             }
         }
     }
+
+    /*public function setNeighbours()
+    {
+
+    }*/
 
 }
