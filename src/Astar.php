@@ -9,7 +9,6 @@ class Astar
     public array $grid = [];
     public array $openSet = [];
     public array $closedSet = [];
-    //public array $neighbours = [];
 
     public $start;
     public $end;
@@ -26,10 +25,19 @@ class Astar
 
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
-                $this->grid[$i][$j] = new AstarSpot(0,0,0);
+                $this->grid[$i][$j] = new AstarSpot($i,$j,$this->columns,$this->rows);
             }
         }
 
+        for ($i = 0; $i < $this->columns; $i++) {
+            for ($j = 0; $j < $this->rows; $j++) {
+                $this->grid[$i][$j]->addNeighbours($this->grid);
+                echo '<pre>'.print_r($this->grid[$i][$j],true).'</pre>';//die();
+            }
+            die();
+        }
+
+        echo '<pre>'.print_r($this->grid,true).'</pre>';die();
         $this->start = $this->grid[0][0];
         $this->end = $this->grid[$this->columns - 1][$this->rows - 1];
 
@@ -69,10 +77,5 @@ class Astar
             }
         }
     }
-
-    /*public function setNeighbours()
-    {
-
-    }*/
 
 }
