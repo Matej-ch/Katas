@@ -37,19 +37,19 @@ class AstarSpot
         $this->neighbours = [];
 
         if($i < $this->cols - 1) {
-            $this->neighbours[] = $grid[$this->i + 1][$this->j];
+            $this->neighbours[] = [$this->i + 1,$this->j];
         }
 
         if($i > 0) {
-            $this->neighbours[] = $grid[$this->i - 1][$this->j];
+            $this->neighbours[] = [$this->i - 1,$this->j];
         }
 
         if($j < $this->rows - 1) {
-            $this->neighbours[] = $grid[$this->i][$this->j + 1];
+            $this->neighbours[] = [$this->i,$this->j + 1];
         }
 
         if($j > 0) {
-            $this->neighbours[] = $grid[$this->i][$this->j - 1];
+            $this->neighbours[] = [$this->i,$this->j - 1];
         }
     }
 }

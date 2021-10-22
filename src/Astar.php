@@ -20,22 +20,17 @@ class Astar
         $this->columns = $columns;
         $this->grid = [];
 
-        /*for ($i = 0; $i < $this->columns; $i++) {
-            $this->grid[$i] = array_fill(0,$rows,0);
-        }*/
-
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
                 $this->grid[$i][$j] = new AstarSpot($i, $j, $this->columns, $this->rows);
             }
         }
 
+
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
                 $this->grid[$i][$j]->addNeighbours($this->grid);
-                //echo '<pre>'.print_r($this->grid[$i][$j],true).'</pre>';//die();
             }
-            //echo '<pre>'.print_r($this->grid,true).'</pre>';die();
         }
 
         $this->start = $this->grid[0][0];
