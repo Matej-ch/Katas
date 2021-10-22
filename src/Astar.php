@@ -9,6 +9,7 @@ class Astar
     public array $grid = [];
     public array $openSet = [];
     public array $closedSet = [];
+    public array $path;
 
     public $start;
     public $end;
@@ -19,9 +20,9 @@ class Astar
         $this->columns = $columns;
         $this->grid = [];
 
-        for ($i = 0; $i < $this->columns; $i++) {
+        /*for ($i = 0; $i < $this->columns; $i++) {
             $this->grid[$i] = array_fill(0,$rows,0);
-        }
+        }*/
 
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
@@ -32,12 +33,11 @@ class Astar
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
                 $this->grid[$i][$j]->addNeighbours($this->grid);
-                echo '<pre>'.print_r($this->grid[$i][$j],true).'</pre>';//die();
+                //echo '<pre>'.print_r($this->grid[$i][$j],true).'</pre>';//die();
             }
-            die();
+            //echo '<pre>'.print_r($this->grid,true).'</pre>';die();
         }
 
-        echo '<pre>'.print_r($this->grid,true).'</pre>';die();
         $this->start = $this->grid[0][0];
         $this->end = $this->grid[$this->columns - 1][$this->rows - 1];
 
@@ -60,8 +60,15 @@ class Astar
 
                 $current = $this->openSet[$winningIndex];
 
+                /** create array with path, backtrack over path */
                 if($current === $this->end) {
-                    //we are done here
+                    $this->path = [];
+                    $temp = $current;
+                    $this->path[] = $temp;
+                    while ($temp->previous) {
+                        $this->path[] = $temp->previous;
+                        $temp = $temp->previous;
+                    }
                     return;
                 }
 
@@ -70,12 +77,45 @@ class Astar
                 //add current
                 $this->closedSet[] = $current;
 
+                $neighbors = $current->neighbors;
+                $neighborsCount = count($neighbors);
+                $neighbor = null;
+                $tempG = 0;
+
+                for($i =0; $i < $neighborsCount;$i++) {
+                    $neighbor = $neighbors[$i];
+
+                    if(in_array($neighbor, $this->closedSet, true)) {
+                        $tempG = $current->g + 1;
+
+                        if(in_array($neighbor, $this->openSet, true)) {
+                            if($tempG < $neighbor->g) {
+                                $neighbor->g = $tempG;
+                            }
+                        } else {
+                            $neighbor->g = $tempG;
+                            $this->openSet[] = $neighbor;
+                        }
+
+                        $neighbor->h = $this->heuristic($neighbor,$this->end);
+                        $neighbor->f = $neighbor->g + $neighbor->h;
+                        $neighbor->previous = $current;
+                    }
+
+
+                }
 
 
             } else {
                 //path not found
             }
         }
+    }
+
+    private function heuristic(AstarSpot $a,AstarSpot $b): float
+    {
+        return abs($a->i - $b->i) + abs($a->j - $b->j);
+        //return sqrt(($a->i - $b->i)^2 + ($a->j - $b->j)^2);
     }
 
 }

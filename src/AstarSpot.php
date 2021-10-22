@@ -4,14 +4,15 @@ namespace App;
 
 class AstarSpot
 {
-    private $f;
-    private $g;
-    private $h;
-    private array $neighbours;
-    private int $i;
-    private int $j;
-    private int $cols;
-    private int $rows;
+    public $f;
+    public $g;
+    public $h;
+    public array $neighbours;
+    public int $i;
+    public int $j;
+    public int $cols;
+    public int $rows;
+    public $previous;
 
     public function __construct(int $i,int $j,int $cols,int $rows)
     {
@@ -24,12 +25,14 @@ class AstarSpot
         $this->j = $j;
         $this->cols = $cols;
         $this->rows = $rows;
+        $this->previous = null;
     }
 
-    public function addNeighbours($grid)
+    public function addNeighbours($grid): void
     {
         $i = $this->i;
         $j = $this->j;
+        $this->neighbours = [];
 
         if($i < $this->cols - 1) {
             $this->neighbours[] = $grid[$this->i + 1][$this->j];
