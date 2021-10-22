@@ -12,7 +12,8 @@ class AstarSpot
     public int $j;
     public int $cols;
     public int $rows;
-    public $previous;
+    public ?AstarSpot $previous;
+    public bool $obstacle;
 
     public function __construct(int $i,int $j,int $cols,int $rows)
     {
@@ -26,6 +27,7 @@ class AstarSpot
         $this->cols = $cols;
         $this->rows = $rows;
         $this->previous = null;
+        $this->obstacle = false;
     }
 
     public function addNeighbours($grid): void

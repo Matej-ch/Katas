@@ -14,7 +14,7 @@ class Astar
     public $start;
     public $end;
 
-    public function __construct($rows,$columns)
+    public function __construct($rows, $columns)
     {
         $this->rows = $rows;
         $this->columns = $columns;
@@ -26,7 +26,7 @@ class Astar
 
         for ($i = 0; $i < $this->columns; $i++) {
             for ($j = 0; $j < $this->rows; $j++) {
-                $this->grid[$i][$j] = new AstarSpot($i,$j,$this->columns,$this->rows);
+                $this->grid[$i][$j] = new AstarSpot($i, $j, $this->columns, $this->rows);
             }
         }
 
@@ -50,10 +50,10 @@ class Astar
 
             $winningIndex = 0;
             $openSetCount = count($this->openSet);
-            if($openSetCount > 0) {
+            if ($openSetCount > 0) {
 
                 for ($i = 0; $i < $openSetCount; $i++) {
-                    if($this->openSet[$i]->f < $this->openSet[$winningIndex]->f) {
+                    if ($this->openSet[$i]->f < $this->openSet[$winningIndex]->f) {
                         $winningIndex = $i;
                     }
                 }
@@ -61,7 +61,7 @@ class Astar
                 $current = $this->openSet[$winningIndex];
 
                 /** create array with path, backtrack over path */
-                if($current === $this->end) {
+                if ($current === $this->end) {
                     $this->path = [];
                     $temp = $current;
                     $this->path[] = $temp;
@@ -82,24 +82,30 @@ class Astar
                 $neighbor = null;
                 $tempG = 0;
 
-                for($i =0; $i < $neighborsCount;$i++) {
+                for ($i = 0; $i < $neighborsCount; $i++) {
                     $neighbor = $neighbors[$i];
 
-                    if(in_array($neighbor, $this->closedSet, true)) {
+                    /*** obstacle check here */
+                    if (!in_array($neighbor, $this->closedSet, true)) {
                         $tempG = $current->g + 1;
 
-                        if(in_array($neighbor, $this->openSet, true)) {
-                            if($tempG < $neighbor->g) {
+                        $newPath = false;
+                        if (in_array($neighbor, $this->openSet, true)) {
+                            if ($tempG < $neighbor->g) {
                                 $neighbor->g = $tempG;
+                                $newPath = true;
                             }
                         } else {
                             $neighbor->g = $tempG;
+                            $newPath = true;
                             $this->openSet[] = $neighbor;
                         }
+                        if ($newPath) {
+                            $neighbor->h = $this->heuristic($neighbor, $this->end);
+                            $neighbor->f = $neighbor->g + $neighbor->h;
+                            $neighbor->previous = $current;
+                        }
 
-                        $neighbor->h = $this->heuristic($neighbor,$this->end);
-                        $neighbor->f = $neighbor->g + $neighbor->h;
-                        $neighbor->previous = $current;
                     }
 
 
@@ -107,12 +113,13 @@ class Astar
 
 
             } else {
+                return;
                 //path not found
             }
         }
     }
 
-    private function heuristic(AstarSpot $a,AstarSpot $b): float
+    private function heuristic(AstarSpot $a, AstarSpot $b): float
     {
         return abs($a->i - $b->i) + abs($a->j - $b->j);
         //return sqrt(($a->i - $b->i)^2 + ($a->j - $b->j)^2);
