@@ -71,14 +71,15 @@ class Astar
                 unset($this->openSet[$winningIndex]);
                 //add current
                 $this->closedSet[] = $current;
-
                 $neighbors = $current->neighbors;
                 $neighborsCount = count($neighbors);
                 $neighbor = null;
                 $tempG = 0;
 
                 for ($i = 0; $i < $neighborsCount; $i++) {
-                    $neighbor = $neighbors[$i];
+
+                    /** here you have to find $neighbors from grid based on index */
+                    $neighbor = $this->grid[$neighbors[$i][0]][$neighbors[$i][1]];
 
                     /*** obstacle check here */
                     if (!in_array($neighbor, $this->closedSet, true)) {
@@ -102,8 +103,6 @@ class Astar
                         }
 
                     }
-
-
                 }
 
 
@@ -116,7 +115,10 @@ class Astar
 
     private function heuristic(AstarSpot $a, AstarSpot $b): float
     {
+        /** taxi driver distance */
         return abs($a->i - $b->i) + abs($a->j - $b->j);
+
+        /** pythagoras */
         //return sqrt(($a->i - $b->i)^2 + ($a->j - $b->j)^2);
     }
 

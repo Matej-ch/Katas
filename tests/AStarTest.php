@@ -10,5 +10,7 @@ class AStarTest extends TestCase
     public function it_returns_path()
     {
         $aStar = new \App\Astar(5,5);
+
+        $aStar->lookForPath();
     }
 }
