@@ -20,7 +20,7 @@ class RomanNumeralsTest extends TestCase
     /**
      * @test
      * @dataProvider checksFromRoman
-     * @param $number
+     * @param $roman
      * @param $expected
      */
     function it_generates_number_from_roman_numerals($roman,$expected)
